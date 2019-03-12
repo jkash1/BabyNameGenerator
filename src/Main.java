@@ -11,20 +11,19 @@ public class Main {
     private static int minLength;
     private static int maxLength;
     private static int markovOrder;
+    private static int numNames;
 
+    private static ArrayList<String> tempBoys = new ArrayList<>();
+    private static ArrayList<String> tempGirls = new ArrayList<>();
+    private static ArrayList<String> finalBoys = new ArrayList<>();
+    private static ArrayList<String> finalGirls = new ArrayList<>();
 
     public static void main(String[] args){
-
-
         System.out.println("======================================");
         System.out.println("Welcome to the Baby Name Generator");
         System.out.println("Created by, James Kash");
         System.out.println("=======================================\n");
-
-      //testing code
-
-
-
+        //testing code
         /*
               UI for choosing either Male of female names
          */
@@ -43,8 +42,6 @@ public class Main {
                 gender = sc.nextLine();
             }
         }
-
-
         /*
             UI for entering the minimum length of the name
          */
@@ -54,8 +51,6 @@ public class Main {
             System.out.println("Please enter a length above 0!");
             minLength = sc.nextInt();
         }
-
-
         /*
              UI for entering the maximum length of the name
          */
@@ -65,29 +60,35 @@ public class Main {
             System.out.println("Please enter a value higher than the minimum length!");
             maxLength = sc.nextInt();
         }
-
-
         /*
             UI for entering the order of the Markov Model
          */
         System.out.println("Please enter the order of the model");
         markovOrder = sc.nextInt();
+        System.out.println("Please enter the number of Names");
+        numNames = sc.nextInt();
+
         NameGenerator nameGenerator = new NameGenerator(markovOrder);
-        ArrayList<String> tempBoys;
-        ArrayList<String> tempGirls;
         tempBoys = nameGenerator.getBoysNames();
         tempGirls = nameGenerator.getGirlsNames();
-        MarkovModel markov = new MarkovModel();
 
+        MarkovModel markov = new MarkovModel();
         if(genderTrigger == 0){
             System.out.println("Generating Male Names.....");
             markov.Model(tempBoys, markovOrder);
+            finalBoys = markov.probabilityModel(markovOrder, minLength, maxLength, numNames);
+            for(String name : finalBoys){
+                System.out.println(name);
+            }
         }else if(genderTrigger == 1){
             System.out.println("Generating Female Names.....");
             markov.Model(tempGirls, markovOrder);
+            finalGirls = markov.probabilityModel(markovOrder, minLength, maxLength, numNames);
+            for(String name: finalGirls){
+                System.out.println(name);
+            }
         }else{
             System.out.println("Error");
         }
-
     }
 }
